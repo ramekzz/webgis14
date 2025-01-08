@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Helps the browser identify support for mobile applications -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, user-scalable=no, maximum-scale=1, width=device-width" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Title on the browser tab -->
+    <title>WebGIS</title>
+    <!-- Leaflet CSS Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+    <!-- Leaflet JavaScript Library -->
+    <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <!-- Style for the fullscreen map display -->
+    <style>
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HTML Block to display the map -->
+    <div id="map"></div>
+    <script>
+      /* Initial Map */
+      var map = L.map("map").setView([-7.9, 110.45], 10);
+
+      /* Tile Basemap */
+      var basemap0 = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      });
+
+      var Esri_WorldImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        attribution: "Tiles &copy; Purnama Akbar &mdash; 246111202 Statistics Program Study at Universitas Islam Indonesia",
+      });
+
+      var OpenTopoMap = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+        maxZoom: 17,
+        attribution:
+          'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+      });
+
+      Esri_WorldImagery.addTo(map);
+
+      /* Control Layer */
+      var baseMaps = {
+        "Open Street Map": basemap0,
+        "Open Topo Map": OpenTopoMap,
+        "Esri WorldImagery": Esri_WorldImagery,
+      };
+
+      var Layers = {};
+      var layerControl = L.control.layers(baseMaps, Layers, { collapsed: false });
+      layerControl.addTo(map);
+
+      // Marker
+      var marker = L.marker([-7.804, 110.3645]);
+      marker.bindPopup("<b>Hello ! </b> <br> Saya Marker");
+      marker.addTo(map);
+      marker.bindTooltip("Hallo <br> Saya <b> Rama </b> dan Adik saya <b> Tata </b>");
+
+      // Custom Marker Icon
+      var markerMerah = L.icon({
+        iconUrl: "marker.jpeg",
+        iconSize: [20, 20],
+      });
+
+      var marker0 = L.marker([-7.6874832621204545, 110.41543590276083], { icon: markerMerah });
+      marker0.addTo(map);
+
+      var marker2 = L.marker([-7.680536469303031, 110.41589327902588], { icon: markerMerah });
+      marker2.bindPopup("Masjid Miftahul Janah");
+      marker2.bindTooltip("8C97+FMR, Kopatan, Umbulmartani, Kec. Ngemplak, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55584");
+      marker2.addTo(map);
+      marker2.openPopup();
+
+      /* Additional Markers for Gunung Kidul */
+      var masjidLocations = [
+        { lat: -8.0304, lng: 110.6235, name: "Masjid Al-Huda Wonosari" },
+        { lat: -8.1203, lng: 110.7107, name: "Masjid Al-Falah Playen" },
+        { lat: -8.0216, lng: 110.5401, name: "Masjid Al-Mukminin Nglipar" },
+        { lat: -8.0813, lng: 110.6169, name: "Masjid Jami' Al-Ihsan" },
+        { lat: -8.0564, lng: 110.4982, name: "Masjid Nurul Huda Semanu" },
+        { lat: -8.0987, lng: 110.6283, name: "Masjid Al-Barokah Karangmojo" },
+        { lat: -8.1094, lng: 110.4948, name: "Masjid Agung Al-Istiqlal Gunung Kidul" },
+        { lat: -8.1425, lng: 110.5453, name: "Masjid Baiturrahman Tepus" },
+        { lat: -8.0856, lng: 110.5103, name: "Masjid Al-Munawaroh Gedangsari" },
+        { lat: -8.1219, lng: 110.6404, name: "Masjid Jami' Al-Muttaqin Paliyan" },
+      ];
+
+      masjidLocations.forEach((location) => {
+        var masjidMarker = L.marker([location.lat, location.lng], { icon: markerMerah });
+        masjidMarker.bindPopup(`<b>${location.name}</b><br>Gunung Kidul, Yogyakarta`).bindTooltip(`<b>${location.name}</b>`);
+        masjidMarker.addTo(map);
+      });
+    </script>
+  </body>
+</html>
